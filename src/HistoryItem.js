@@ -1,4 +1,4 @@
-import { StrokeFactory } from 'stroke';
+import { StrokeFactory } from 'drawing-strokes';
 export function HistoryItemFactory(data) {
     return new HistoryItem(data.id, data.action, data.data);
 }

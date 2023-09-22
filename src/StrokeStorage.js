@@ -1,4 +1,4 @@
-import { StrokeFactory } from "stroke";
+import { StrokeFactory } from "drawing-strokes";
 import { HistoryItem, HistoryItemFactory } from "./HistoryItem.js";
 
 export class StrokeStorage {
@@ -43,7 +43,7 @@ export class StrokeStorage {
     push(item) {
         if (!(item instanceof HistoryItem)) { throw "push item must be HistoryItem" }
 
-        if (item.id > 0) {
+        if (item.id != "event") {
             this.strokes[item.id] = item;
         }
 

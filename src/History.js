@@ -1,5 +1,5 @@
 import SparkMD5 from "spark-md5";
-import { StrokeFactory } from "stroke";
+import { StrokeFactory } from "drawing-strokes";
 import { StrokeStorage } from "./StrokeStorage.js";
 import { HistoryItem, HistoryItemFactory } from "./HistoryItem.js";
 
@@ -97,8 +97,19 @@ export class History {
         throw "NOT USED";
     }
 
-    get readonlyStrokes() {
+    get readonly() {
         return this.storage.items;
+    }
+
+    get readonlyStrokes() {
+        return this.storage.items
+            .filter(x => x.action === 'stroke')
+            .map(x => x.data);
+    }
+
+    get liveStrokes() {
+        return this.readonlyStrokes
+            .filter(stroke => !stroke._deleted);
     }
 
     // TODO: describe exactly why this is used and what the expectations are
@@ -184,7 +195,7 @@ export class History {
             let stroke = this.storage.getData(id);
             stroke._deleted = true;
 
-            this.storage.pushAction(-1, 'delete', stroke);
+            this.storage.pushAction('event', 'delete', stroke);
         } else {
             throw "ERROR: can't delete stroke, does not exist";
         }
@@ -193,9 +204,9 @@ export class History {
     undo() {
         if (this.storage.length == 0 && this.clearStack.length > 0) {
             this.storage.rebuild(this.clearStack.pop());
-            //this.storage.pushAction(-1, "clear");
-            //this.undoStack.pushAction(-1, "clear");
-            this.undoStack.push(new HistoryItem(-1, "clear"));
+            //this.storage.pushAction('event', "clear");
+            //this.undoStack.pushAction('event', "clear");
+            this.undoStack.push(new HistoryItem('event', "clear"));
         } else if (this.storage.length > 0) {
             let item = this.storage.pop();
 
