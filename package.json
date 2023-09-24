@@ -2,6 +2,7 @@
   "name": "drawing-history",
   "type": "module",
   "version": "1.0.1",
+  "access": "public",
   "description": "",
   "main": "src/index.js",
   "dependencies": {
