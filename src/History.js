@@ -139,6 +139,19 @@ export class History {
         this.strokeOrder.push(...data.strokeOrder.map(StrokeFactory));
     }
 
+    getUniqueStrokeId() {
+        let id;
+
+        // test to see if it already exists
+        while (!id || this.storage.has(id)) {
+            // generate a random stroke id
+            // TODO: for now, use 31 bit id, but switch to string ids soon
+            id = Math.floor(Math.random()*2147483647);
+        }
+
+        return id
+    }
+
     // Data is being added. The stroke can come in, but it needs to be stored
     // as an action object
     newStroke(stroke) {
